@@ -3,7 +3,7 @@ import mediapipe as mp
 import csv
 import time
 
-# Inicializa MediaPipe Face Mesh con refine_landmarks=True para puntos del iris
+# Initialize MediaPipe Face Mesh with refine_landmarks=True for iris points
 mp_face_mesh = mp.solutions.face_mesh
 face_mesh = mp_face_mesh.FaceMesh(
     static_image_mode=False,
@@ -13,26 +13,26 @@ face_mesh = mp_face_mesh.FaceMesh(
     min_tracking_confidence=0.5
 )
 
-# Inicia la cámara
+# Start webcam capture
 cap = cv2.VideoCapture(0)
 
-# Archivo CSV para guardar datos
-csv_file = open('datos_mockup_generado.csv', mode='w', newline='')
+# Open CSV file to save data
+csv_file = open('generated_mockup_data.csv', mode='w', newline='')
 csv_writer = csv.writer(csv_file)
 csv_writer.writerow(['x', 'y', 'time'])
 
-# Índices para iris izquierdo y derecho
-LEFT_EYE_LANDMARK = 468
-RIGHT_EYE_LANDMARK = 473
+# Indices for left and right iris landmarks
+LEFT_IRIS_LANDMARK = 468
+RIGHT_IRIS_LANDMARK = 473
 
-print("Presiona 'q' para detener la grabación...")
+print("Press 'q' to stop recording...")
 
 start_time = time.time()
 
 while cap.isOpened():
     success, frame = cap.read()
     if not success:
-        print("No se pudo capturar el frame.")
+        print("Failed to capture frame.")
         break
 
     frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -40,26 +40,26 @@ while cap.isOpened():
 
     if results.multi_face_landmarks:
         for face_landmarks in results.multi_face_landmarks:
-            h, w, _ = frame.shape
+            height, width, _ = frame.shape
             landmarks = face_landmarks.landmark
 
-            # Verifica que existan los landmarks de los iris
-            if len(landmarks) > RIGHT_EYE_LANDMARK:
-                left = landmarks[LEFT_EYE_LANDMARK]
-                right = landmarks[RIGHT_EYE_LANDMARK]
+            # Check if landmarks include iris points
+            if len(landmarks) > RIGHT_IRIS_LANDMARK:
+                left_iris = landmarks[LEFT_IRIS_LANDMARK]
+                right_iris = landmarks[RIGHT_IRIS_LANDMARK]
 
-                lx, ly = int(left.x * w), int(left.y * h)
-                rx, ry = int(right.x * w), int(right.y * h)
+                left_x, left_y = int(left_iris.x * width), int(left_iris.y * height)
+                right_x, right_y = int(right_iris.x * width), int(right_iris.y * height)
 
                 elapsed_time = round(time.time() - start_time, 2)
 
-                # Guardar posiciones y tiempo en CSV
-                csv_writer.writerow([lx, ly, elapsed_time])
-                csv_writer.writerow([rx, ry, elapsed_time])
+                # Save positions and time to CSV
+                csv_writer.writerow([left_x, left_y, elapsed_time])
+                csv_writer.writerow([right_x, right_y, elapsed_time])
 
-                # Dibujar círculos en pantalla
-                cv2.circle(frame, (lx, ly), 3, (255, 0, 0), -1)
-                cv2.circle(frame, (rx, ry), 3, (0, 255, 0), -1)
+                # Draw circles on screen at iris positions
+                cv2.circle(frame, (left_x, left_y), 3, (255, 0, 0), -1)   # Blue circle for left iris
+                cv2.circle(frame, (right_x, right_y), 3, (0, 255, 0), -1) # Green circle for right iris
 
     cv2.imshow('Eye Tracker', frame)
 

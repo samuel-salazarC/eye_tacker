@@ -3,19 +3,21 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-def cargar_datos(ruta_imagen, ruta_csv):
-    imagen = cv2.imread(ruta_imagen)
-    imagen = cv2.cvtColor(imagen, cv2.COLOR_BGR2RGB)
-    datos = pd.read_csv(ruta_csv)
-    return imagen, datos
+def load_data(image_path, csv_path):
+    # Load the image and convert BGR to RGB for proper display in matplotlib
+    image = cv2.imread(image_path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    # Load the eye tracking coordinates from CSV
+    data = pd.read_csv(csv_path)
+    return image, data
 
-def generar_heatmap(imagen, datos, titulo='Heatmap'):
+def generate_heatmap(image, data, title='Heatmap'):
     plt.figure(figsize=(12, 8))
-    plt.imshow(imagen)
+    plt.imshow(image)
 
     sns.kdeplot(
-        x=datos['x'],
-        y=datos['y'],
+        x=data['x'],
+        y=data['y'],
         cmap='plasma',
         fill=True,
         alpha=0.5,
@@ -24,12 +26,12 @@ def generar_heatmap(imagen, datos, titulo='Heatmap'):
     )
 
     plt.axis('off')
-    plt.title(titulo)
+    plt.title(title)
     plt.show()
 
 if __name__ == "__main__":
-    ruta_mockup = 'mockup_bueno.png'
-    ruta_datos = 'datos_mockup_generado.csv'
+    image_path = 'mockup_good.png'
+    csv_path = 'generated_mockup_data.csv'
 
-    imagen, datos = cargar_datos(ruta_mockup, ruta_datos)
-    generar_heatmap(imagen, datos, titulo='Heatmap - Eye Tracking')
+    image, data = load_data(image_path, csv_path)
+    generate_heatmap(image, data, title='Eye Tracking Heatmap')
