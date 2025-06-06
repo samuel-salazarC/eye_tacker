@@ -29,9 +29,8 @@ def generate_heatmap(image, data, title='Heatmap'):
     plt.title(title)
     plt.show()
 
-if __name__ == "__main__":
-    image_path = 'mockup_good.png'
-    csv_path = 'generated_mockup_data.csv'
 
-    image, data = load_data(image_path, csv_path)
-    generate_heatmap(image, data, title='Eye Tracking Heatmap')
+if __name__ == "__main__":
+    csv_path = 'generated_mockup_data.csv'
+    data = pd.read_csv(csv_path)
+    generate_heatmap(data, title='Eye Tracking Heatmap')
