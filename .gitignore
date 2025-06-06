@@ -1,0 +1,45 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+
+# Jupyter Notebook checkpoints (por si luego usas notebooks)
+.ipynb_checkpoints
+
+# Data files
+*.csv
+*.log
+
+# Imágenes generadas
+*.png
+*.jpg
+*.jpeg
+
+# Plots o visualizaciones
+*.svg
+*.pdf
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Mac OS metadata
+*.DS_Store
+
+# PyCharm
+*.iml
+
+# Python environment files
+Pipfile.lock
+poetry.lock
